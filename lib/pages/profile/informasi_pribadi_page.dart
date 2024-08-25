@@ -106,13 +106,18 @@ class InformasiPribadiPage extends StatelessWidget {
                 ? Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 16),
-                    child: ButtonPrimary(
-                      text: 'Selanjutnya',
-                      onTap: () {
-                        controller.isSelectedIndex.value = 1;
-                        biodataDiriController.saveBiodata();
-                      },
-                    ),
+                    child: Obx(() => ButtonPrimary(
+                          text: biodataDiriController.isAllFormValid.value
+                              ? 'Selanjutnya'
+                              : 'Lengkapi Data Required',
+                          onTap: biodataDiriController.isAllFormValid.value
+                              ? () {
+                                  controller.isSelectedIndex.value = 1;
+                                  biodataDiriController.saveBiodata();
+                                }
+                              : () {},
+                          isActive: biodataDiriController.isAllFormValid.value,
+                        )),
                   )
                 : controller.isSelectedIndex.value == 1
                     ? Container(
@@ -159,13 +164,23 @@ class InformasiPribadiPage extends StatelessWidget {
                                   width: 12.0,
                                 ),
                                 Expanded(
-                                  child: ButtonPrimary(
-                                    text: 'Selanjutnya',
-                                    onTap: () {
-                                      alamatPribadiController.saveAlamat();
-                                      controller.isSelectedIndex.value = 2;
-                                    },
-                                  ),
+                                  child: Obx(() => ButtonPrimary(
+                                        text: alamatPribadiController
+                                                .isAllFormValid.value
+                                            ? 'Selanjutnya'
+                                            : 'Lengkapi Data Required',
+                                        onTap: alamatPribadiController
+                                                .isAllFormValid.value
+                                            ? () {
+                                                alamatPribadiController
+                                                    .saveAlamat();
+                                                controller
+                                                    .isSelectedIndex.value = 2;
+                                              }
+                                            : () {},
+                                        isActive: alamatPribadiController
+                                            .isAllFormValid.value,
+                                      )),
                                 ),
                               ],
                             ),
@@ -194,6 +209,7 @@ class InformasiPribadiPage extends StatelessWidget {
                                   onTap: () {
                                     informasiPerusahaanController
                                         .saveInformasiPerusahaan();
+                                    Get.back();
                                   }),
                             ),
                           ],

@@ -9,29 +9,45 @@ import 'package:payuung_pribadi/utilities/database_helper.dart';
 class AlamatPribadiController extends GetxController {
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadAlamat();
-  }
+  var listTextEditingAkunRequired = <TextEditingController>[].obs;
+  var isAllFormValid = false.obs;
 
   var pickerPhoto = ImagePicker().obs;
   var filePathPhoto = "".obs;
   var deletePhoto = false.obs;
 
   // Controllers for text fields
-  final TextEditingController nikController = TextEditingController(text: '33');
-  final TextEditingController alamatController =
-      TextEditingController(text: 'ff');
-  final TextEditingController provinsiController =
-      TextEditingController(text: 'dd');
-  final TextEditingController kotaController = TextEditingController(text: 'v');
-  final TextEditingController kecamatanController =
-      TextEditingController(text: 'ddd');
-  final TextEditingController kelurahanController =
-      TextEditingController(text: 'ddd');
-  final TextEditingController kodePosController =
-      TextEditingController(text: 'ff');
+  final TextEditingController nikController = TextEditingController();
+  final TextEditingController alamatController = TextEditingController();
+  final TextEditingController provinsiController = TextEditingController();
+  final TextEditingController kotaController = TextEditingController();
+  final TextEditingController kecamatanController = TextEditingController();
+  final TextEditingController kelurahanController = TextEditingController();
+  final TextEditingController kodePosController = TextEditingController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadAlamat();
+
+    listTextEditingAkunRequired.value = [
+      nikController,
+      alamatController,
+      provinsiController,
+      kotaController,
+      kecamatanController,
+      kelurahanController,
+      kodePosController,
+    ];
+
+    for (int i = 0; i < listTextEditingAkunRequired.length; i++) {
+      listTextEditingAkunRequired[i].addListener(() {
+        listTextEditingAkunRequired.every((element) => element.text.isNotEmpty
+            ? isAllFormValid.value = true
+            : isAllFormValid.value = false);
+      });
+    }
+  }
 
   Future<void> changePhoto({bool camera = false}) async {
     final pickedFile = await pickerPhoto.value

@@ -7,11 +7,8 @@ import 'package:intl/intl.dart';
 class BiodataDiriController extends GetxController {
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadBiodata();
-  }
+  var listTextEditingAkunRequired = <TextEditingController>[].obs;
+  var isAllFormValid = false.obs;
 
   final TextEditingController namaLengkapController = TextEditingController();
   final TextEditingController tanggalLahirController = TextEditingController();
@@ -21,6 +18,28 @@ class BiodataDiriController extends GetxController {
   final TextEditingController pendidikanController = TextEditingController();
   final TextEditingController statusPernikahanController =
       TextEditingController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadBiodata();
+
+    listTextEditingAkunRequired.value = [
+      namaLengkapController,
+      // tanggalLahirController,
+      jenisKelaminController,
+      emailController,
+      noHpController
+    ];
+
+    for (int i = 0; i < listTextEditingAkunRequired.length; i++) {
+      listTextEditingAkunRequired[i].addListener(() {
+        listTextEditingAkunRequired.every((element) => element.text.isNotEmpty
+            ? isAllFormValid.value = true
+            : isAllFormValid.value = false);
+      });
+    }
+  }
 
   Future<void> saveBiodata() async {
     final biodata = Biodata(

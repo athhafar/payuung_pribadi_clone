@@ -25,7 +25,7 @@ class ButtonPrimary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: isActive ? bgColor : Color(0xFFE5E5E5),
+          color: isActive ? bgColor : kColorPrimary.withOpacity(0.5),
           borderRadius: BorderRadius.circular(100)),
       child: Material(
         color: Colors.transparent,
