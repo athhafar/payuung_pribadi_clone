@@ -135,6 +135,7 @@ class HomePage extends StatelessWidget {
                 refreshController.refreshCompleted();
               },
               onLoading: () async {
+                await Future.delayed(const Duration(milliseconds: 1000));
                 refreshController.loadComplete();
               },
               child: SingleChildScrollView(
@@ -305,6 +306,9 @@ class HomePage extends StatelessWidget {
                                         .listExploreWelness[index].image,
                                   );
                                 }),
+                                const SizedBox(
+                                height: 32.0,
+                                ),
                           ],
                         ),
                       ),
@@ -313,7 +317,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
+        
         ],
       ),
     );

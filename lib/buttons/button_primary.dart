@@ -37,12 +37,16 @@ class ButtonPrimary extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  text,
-                  style: TStyle.paragraphSmallSemiBold.copyWith(
-                    color: isActive ? textColor : kColorNeutral400,
+                Expanded(
+                  child: Text(
+                    text,
+                    style: TStyle.paragraphSmallSemiBold.copyWith(
+                      color: isActive ? textColor : kColorNeutral400,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 isWithArrow
                     ? Container(
