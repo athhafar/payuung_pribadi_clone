@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/alamat_pribadi_controller.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetKota extends StatelessWidget {
   BottomSheetKota({Key? key}) : super(key: key);
 
+  List<String> kotaList = [
+    'JAKARTA TIMUR',
+    'JAKARTA TIMURR',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final AlamatPribadiController controller = Get.find();
-
     return Container(
       width: Get.width,
       decoration: const BoxDecoration(
@@ -42,15 +45,16 @@ class BottomSheetKota extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
               shrinkWrap: true,
-              itemCount: controller.kotaList.length,
+              itemCount: kotaList.length,
               itemBuilder: (context, index) {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(SelectKota(kotaList[index]));
                       Get.back();
-                      controller.kotaController.text =
-                          controller.kotaList[index];
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +66,7 @@ class BottomSheetKota extends StatelessWidget {
                             vertical: 24,
                           ),
                           child: Text(
-                            controller.kotaList[index],
+                            kotaList[index],
                             style: TStyle.paragraphMediumRegular,
                           ),
                         ),

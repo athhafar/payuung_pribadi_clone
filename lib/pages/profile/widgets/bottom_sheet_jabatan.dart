@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetjabatanList extends StatelessWidget {
   BottomSheetjabatanList({Key? key}) : super(key: key);
 
-  InformasiPerusahaanController controller = Get.find();
+  List<String> jabatanList = [
+    'Manajer',
+    'Supervisor',
+    'Staff',
+    'Administrasi',
+    'Teknisi',
+    'Marketing',
+    'Akuntan',
+    'Asisten',
+    'Desainer',
+    'Pengembang'
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +48,16 @@ class BottomSheetjabatanList extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.jabatanList.length,
+                itemCount: jabatanList.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context
+                            .read<ProfileBloc>()
+                            .add(SelectJabatan(jabatanList[index]));
                         Get.back();
-                        controller.jabatanController.text =
-                            controller.jabatanList[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +69,7 @@ class BottomSheetjabatanList extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.jabatanList[index],
+                              jabatanList[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

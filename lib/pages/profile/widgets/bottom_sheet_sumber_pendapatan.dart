@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetSumberPendapatan extends StatelessWidget {
   BottomSheetSumberPendapatan({Key? key}) : super(key: key);
 
-  InformasiPerusahaanController controller = Get.find();
+  List<String> sumberPendapatanList = [
+    'Gaji Tetap',
+    'Bisnis',
+    'Investasi',
+    'Penghasilan Sampingan',
+    'Honorarium',
+    'Hasil Sewa',
+    'Lainnya',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +46,17 @@ class BottomSheetSumberPendapatan extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.sumberPendapatanList.length,
+                itemCount: sumberPendapatanList.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context.read<ProfileBloc>().add(
+                              SelectSumberPendapatan(
+                                  sumberPendapatanList[index]),
+                            );
                         Get.back();
-                        controller.sumberPendapatanController.text =
-                            controller.sumberPendapatanList[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +68,7 @@ class BottomSheetSumberPendapatan extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.sumberPendapatanList[index],
+                              sumberPendapatanList[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetPendapatanKotor extends StatelessWidget {
   BottomSheetPendapatanKotor({Key? key}) : super(key: key);
 
-  InformasiPerusahaanController controller = Get.find();
+  List<String> pendapatanKotorList = [
+    '< 50 Juta',
+    '50 Juta - 100 Juta',
+    '100 Juta - 200 Juta',
+    '200 Juta - 500 Juta',
+    '500 Juta - 1 Miliar',
+    '1 Miliar - 2 Miliar',
+    '> 2 Miliar',
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +45,17 @@ class BottomSheetPendapatanKotor extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.pendapatanKotorList.length,
+                itemCount: pendapatanKotorList.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context.read<ProfileBloc>().add(
+                              SelectPendapatanPerTahun(
+                                  pendapatanKotorList[index]),
+                            );
                         Get.back();
-                        controller.pendapatanKotorPertahunController.text =
-                            controller.pendapatanKotorList[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +67,7 @@ class BottomSheetPendapatanKotor extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.pendapatanKotorList[index],
+                              pendapatanKotorList[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetStatusNikah extends StatelessWidget {
   BottomSheetStatusNikah({Key? key}) : super(key: key);
+  final List<String> statusPernikahan = [
+    'Belum Menikah',
+    'Menikah',
+    'Janda',
+    'Duda'
+  ];
 
-  BiodataDiriController controller = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,15 +42,15 @@ class BottomSheetStatusNikah extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.statusPernikahan.length,
+                itemCount: statusPernikahan.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context.read<ProfileBloc>().add(
+                            SelectStatusPernikahan(statusPernikahan[index]));
                         Get.back();
-                        controller.statusPernikahanController.text =
-                            controller.statusPernikahan[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +62,7 @@ class BottomSheetStatusNikah extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.statusPernikahan[index],
+                              statusPernikahan[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetLamaBekerja extends StatelessWidget {
   BottomSheetLamaBekerja({Key? key}) : super(key: key);
 
-  InformasiPerusahaanController controller = Get.find();
+  List<String> lamaBekerjaList = [
+    'Kurang dari 1 tahun',
+    '1 - 2 tahun',
+    '2 - 3 tahun',
+    '3 - 5 tahun',
+    '5 - 7 tahun',
+    '7 - 10 tahun',
+    'Lebih dari 10 tahun',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +46,16 @@ class BottomSheetLamaBekerja extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.lamaBekerjaList.length,
+                itemCount: lamaBekerjaList.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context
+                            .read<ProfileBloc>()
+                            .add(SelectLamaBekerja(lamaBekerjaList[index]));
                         Get.back();
-                        controller.lamaBekerjaController.text =
-                            controller.lamaBekerjaList[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +67,7 @@ class BottomSheetLamaBekerja extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.lamaBekerjaList[index],
+                              lamaBekerjaList[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

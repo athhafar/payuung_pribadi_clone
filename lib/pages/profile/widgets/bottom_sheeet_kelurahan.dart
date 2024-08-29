@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/alamat_pribadi_controller.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheeetKelurahan extends StatelessWidget {
   BottomSheeetKelurahan({Key? key}) : super(key: key);
 
+  List<String> kelurahanList = ['PEKAYON', 'PEKAYOON'];
+
   @override
   Widget build(BuildContext context) {
-    final AlamatPribadiController controller = Get.find();
-
     return Container(
       width: Get.width,
       decoration: const BoxDecoration(
@@ -42,15 +42,16 @@ class BottomSheeetKelurahan extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
               shrinkWrap: true,
-              itemCount: controller.kelurahanList.length,
+              itemCount: kelurahanList.length,
               itemBuilder: (context, index) {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(SelectKelurahan(kelurahanList[index]));
                       Get.back();
-                      controller.kelurahanController.text =
-                          controller.kelurahanList[index];
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +63,7 @@ class BottomSheeetKelurahan extends StatelessWidget {
                             vertical: 24,
                           ),
                           child: Text(
-                            controller.kelurahanList[index],
+                            kelurahanList[index],
                             style: TStyle.paragraphMediumRegular,
                           ),
                         ),

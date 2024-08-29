@@ -1,35 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:payuung_pribadi/buttons/button_action.dart';
-import 'package:payuung_pribadi/buttons/button_primary.dart';
-import 'package:payuung_pribadi/controller/profile/alamat_pribadi_controller.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
 import 'package:payuung_pribadi/controller/profile/informasi_pribadi_controller.dart';
 import 'package:payuung_pribadi/pages/profile/widgets/alamat_pribadi_widget.dart';
 import 'package:payuung_pribadi/pages/profile/widgets/biodata_diri_widget.dart';
-import 'package:payuung_pribadi/pages/profile/widgets/bottom_sheet_jenis_kelamin.dart';
-import 'package:payuung_pribadi/pages/profile/widgets/bottom_sheet_pendidikan.dart';
 import 'package:payuung_pribadi/pages/profile/widgets/informasi_perusahaan_widget.dart';
 import 'package:payuung_pribadi/pages/profile/widgets/tabbar_profile_card.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
-import 'package:payuung_pribadi/utilities/constant.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 import 'package:collection/collection.dart';
-import 'package:payuung_pribadi/widgets/check_box_costum.dart';
-import 'package:payuung_pribadi/widgets/date_picker_costum.dart';
 
 class InformasiPribadiPage extends StatelessWidget {
   InformasiPribadiPage({super.key});
 
   InformasiPribadiController controller = Get.put(InformasiPribadiController());
-  BiodataDiriController biodataDiriController =
-      Get.put(BiodataDiriController());
-  AlamatPribadiController alamatPribadiController =
-      Get.put(AlamatPribadiController());
-  InformasiPerusahaanController informasiPerusahaanController =
-      Get.put(InformasiPerusahaanController());
 
   @override
   Widget build(BuildContext context) {
@@ -99,121 +83,6 @@ class InformasiPribadiPage extends StatelessWidget {
                       )
                     : Expanded(
                         child: InformasiPerusahaanWidget(),
-                      ),
-          ),
-          Obx(
-            () => controller.isSelectedIndex.value == 0
-                ? Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    child: Obx(() => ButtonPrimary(
-                          text: biodataDiriController.isAllFormValid.value
-                              ? 'Selanjutnya'
-                              : 'Lengkapi Data Required',
-                          onTap: biodataDiriController.isAllFormValid.value
-                              ? () {
-                                  controller.isSelectedIndex.value = 1;
-                                  biodataDiriController.saveBiodata();
-                                }
-                              : () {},
-                          isActive: biodataDiriController.isAllFormValid.value,
-                        )),
-                  )
-                : controller.isSelectedIndex.value == 1
-                    ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Obx(() => CheckBoxCustom(
-                                      check:
-                                          alamatPribadiController.isCheck.value,
-                                      onTap: () {
-                                        alamatPribadiController.isCheck.value =
-                                            !alamatPribadiController
-                                                .isCheck.value;
-                                      },
-                                    )),
-                                const SizedBox(
-                                  width: 8.0,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "Alamat Domisili Sama Dengan Alamat Pada KTP",
-                                    style: TStyle.paragraphSmallMedium,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 12.0,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ButtonPrimary(
-                                    text: 'Sebelumnya',
-                                    onTap: () {
-                                      controller.isSelectedIndex.value = 1;
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 12.0,
-                                ),
-                                Expanded(
-                                  child: Obx(() => ButtonPrimary(
-                                        text: alamatPribadiController
-                                                .isAllFormValid.value
-                                            ? 'Selanjutnya'
-                                            : 'Lengkapi Data Required',
-                                        onTap: alamatPribadiController
-                                                .isAllFormValid.value
-                                            ? () {
-                                                alamatPribadiController
-                                                    .saveAlamat();
-                                                controller
-                                                    .isSelectedIndex.value = 2;
-                                              }
-                                            : () {},
-                                        isActive: alamatPribadiController
-                                            .isAllFormValid.value,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ButtonPrimary(
-                                text: 'Sebelumnya',
-                                onTap: () {
-                                  controller.isSelectedIndex.value = 1;
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 12.0,
-                            ),
-                            Expanded(
-                              child: ButtonPrimary(
-                                  text: 'Simpan',
-                                  onTap: () {
-                                    informasiPerusahaanController
-                                        .saveInformasiPerusahaan();
-                                    Get.back();
-                                  }),
-                            ),
-                          ],
-                        ),
                       ),
           ),
         ],

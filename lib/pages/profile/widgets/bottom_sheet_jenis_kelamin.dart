@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetJenisKelamin extends StatelessWidget {
   BottomSheetJenisKelamin({Key? key}) : super(key: key);
 
+  final List<String> genders = ['Laki Laki', 'Perempuan'];
+
   @override
   Widget build(BuildContext context) {
-    final BiodataDiriController controller = Get.find();
-
     return Container(
       width: Get.width,
       decoration: const BoxDecoration(
@@ -41,15 +42,16 @@ class BottomSheetJenisKelamin extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
               shrinkWrap: true,
-              itemCount: controller.genders.length,
+              itemCount: genders.length,
               itemBuilder: (context, index) {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(SelectJenisKelamin(genders[index]));
                       Get.back();
-                      controller.jenisKelaminController.text =
-                          controller.genders[index];
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +63,7 @@ class BottomSheetJenisKelamin extends StatelessWidget {
                             vertical: 24,
                           ),
                           child: Text(
-                            controller.genders[index],
+                            genders[index],
                             style: TStyle.paragraphMediumRegular,
                           ),
                         ),

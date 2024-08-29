@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
-import 'package:payuung_pribadi/controller/profile/informasi_perusahaan_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetNamaBank extends StatelessWidget {
   BottomSheetNamaBank({Key? key}) : super(key: key);
 
-  InformasiPerusahaanController controller = Get.find();
+  List<String> namaBankList = [
+    'Bank Negara Indonesia (BNI)',
+    'Bank Rakyat Indonesia (BRI)',
+    'Bank Mandiri',
+    'Bank Central Asia (BCA)',
+    'Bank CIMB Niaga',
+    'Bank Danamon',
+    'Bank Permata',
+    'Bank Negara Indonesia Syariah (BNI Syariah)',
+    'Bank Muamalat',
+    'Bank BTPN',
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,15 +48,16 @@ class BottomSheetNamaBank extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: controller.namaBankList.length,
+                itemCount: namaBankList.length,
                 itemBuilder: (context, index) {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        context.read<ProfileBloc>().add(
+                              SelectNamaBank(namaBankList[index]),
+                            );
                         Get.back();
-                        controller.namaBankController.text =
-                            controller.namaBankList[index];
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +69,7 @@ class BottomSheetNamaBank extends StatelessWidget {
                               vertical: 24,
                             ),
                             child: Text(
-                              controller.namaBankList[index],
+                              namaBankList[index],
                               style: TStyle.paragraphMediumRegular,
                             ),
                           ),

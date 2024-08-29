@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:payuung_pribadi/controller/profile/alamat_pribadi_controller.dart';
-import 'package:payuung_pribadi/controller/profile/biodata_diri_controller.dart';
+import 'package:payuung_pribadi/bloc/profile/profile_bloc.dart';
 import 'package:payuung_pribadi/utilities/colors.dart';
 import 'package:payuung_pribadi/utilities/typography.dart';
 
 class BottomSheetProvinsi extends StatelessWidget {
   BottomSheetProvinsi({Key? key}) : super(key: key);
 
+  List<String> provinsiList = [
+    'DKI JAKARTA',
+    'JAKARTA',
+  ];
   @override
   Widget build(BuildContext context) {
-    final AlamatPribadiController controller = Get.find();
-
     return Container(
       width: Get.width,
       decoration: const BoxDecoration(
@@ -42,15 +44,16 @@ class BottomSheetProvinsi extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.zero,
               shrinkWrap: true,
-              itemCount: controller.provinsiList.length,
+              itemCount: provinsiList.length,
               itemBuilder: (context, index) {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
                     onTap: () {
+                      context
+                          .read<ProfileBloc>()
+                          .add(SelectProvinsi(provinsiList[index]));
                       Get.back();
-                      controller.provinsiController.text =
-                          controller.provinsiList[index];
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +65,7 @@ class BottomSheetProvinsi extends StatelessWidget {
                             vertical: 24,
                           ),
                           child: Text(
-                            controller.provinsiList[index],
+                            provinsiList[index],
                             style: TStyle.paragraphMediumRegular,
                           ),
                         ),
